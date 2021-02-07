@@ -1,0 +1,219 @@
+{
+   "swagger": "2.0",
+   "info": {
+      "version": "1.0.0",
+      "title": "NewsMonitoring API"
+   },
+   "consumes": [
+      "text/plain"
+   ],
+   "produces": [
+      "application/json"
+   ],
+   "paths": {
+      "/health": {
+         "get": {
+            "operationId": "get",
+            "description": "Get health status of NewsMonitoring API",
+            "responses": {
+               "200": {
+                  "description": "Health check response",
+                  "schema": {
+                     "$ref": "#/definitions/healthResponse"
+                  },
+                  "examples": {
+                     "application/json": {
+                        "status": "UP"
+                     }
+                  }
+               }
+            }
+         }
+      },
+      "/clientNews": {
+         "get": {
+            "operationId": "get",
+            "description": "Get all news for all clients",
+            "responses": {
+               "200": {
+                  "description": "Client news response",
+                  "schema": {
+                     "$ref": "#/definitions/clientNewsResponse"
+                  },
+                  "examples": {
+                     "application/json": {
+                        "statusCode": 200,
+                        "number_of_clients": 0,
+                        "results": []
+                    }
+                  }
+               }
+            }
+         },
+         "post": {
+            "operationId": "post",
+            "description": "Add new client news",
+            "consumes": "application/json",
+            "parameters": [{
+               "in": "body",
+               "name": "newClientNews",
+               "required": false,
+               "description": "New client news to be added or updated",
+               "schema": {
+                  "$ref": "#/definitions/ClientNews"
+               }
+            }],
+            "responses": {
+               "200": {
+                  "description": "New client news added successfully",
+                  "schema": {
+                     "$ref": "#/definitions/newClientNewsResponse"
+                  },
+                  "examples": {
+                     "application/json": {
+                        "statusCode": 201,
+                        "message": ""
+                    }
+                  }
+               }
+            }
+         }
+      },
+      "/clientNews/getClientNewsById": {
+         "get": {
+            "operationId": "getClientNewsById",
+            "description": "Get all news for a client",
+            "parameters": [
+               {
+                  "in": "query",
+                  "name": "id",
+                  "required": true,
+                  "description": "Client ID",
+                  "schema": {
+                     "type": "integer"
+                  }
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Client news response",
+                  "schema": {
+                     "$ref": "#/definitions/ClientNewsResponseById"
+                  },
+                  "examples": {
+                     "application/json": {
+                        "statusCode": 200,
+                        "number_of_clients": 0,
+                        "results": []
+                    }
+                  }
+               }
+            }
+         }
+      }
+   },
+   "definitions": {
+      "healthResponse": {
+         "type": "object",
+         "properties": {
+            "status": {
+               "type": "string"
+            }
+         }
+      },
+      "clientNewsResponse": {
+         "type": "object",
+         "properties": {
+            "statusCode": {
+               "type": "integer"
+            },
+            "number_of_clients": {
+               "type": "integer"
+            },
+            "results": {
+               "type": "array"
+            }
+         }
+      },
+      "newClientNewsResponse": {
+         "type": "object",
+         "properties": {
+            "statusCode": {
+               "type": "integer"
+            },
+            "message": {
+               "type": "string"
+            }
+         }
+      },
+      "News": {
+         "type": "object",
+         "properties": {
+            "newsHeadline": {
+               "type":  "string"
+            },
+            "newsSummary": {
+               "type":  "string"
+            },
+            "newsSource": {
+               "type":  "string"
+            },
+            "relevanceScore": {
+               "type":  "string"
+            },
+            "newsURL": {
+               "type":  "string"
+            },
+            "imageURL": {
+               "type":  "string"
+            },
+            "publishedDate": {
+               "type": "string"
+            }
+         }
+      },
+      "ClientNews": {
+         "type": "object",
+         "required": [
+            "clientId",
+            "name",
+            "contactInfo",
+            "interests"
+         ],
+         "properties": {
+            "clientId": {
+               "type": "integer"
+            },
+            "name": {
+               "type":  "string"
+            },
+            "contactInfo": {
+               "type":  "string"
+            },
+            "interests": {
+               "type":  "string"
+            },
+            "clientNews": {
+               "type":  "array",
+               "items": {
+                  "$ref": "#/definitions/News"
+               }
+            }
+         }
+      },
+      "ClientNewsResponseById": {
+         "type": "object",
+         "properties": {
+            "status": {
+               "type": "integer"
+            },
+            "result": {
+               "type":  "array",
+               "items": {
+                  "$ref": "#/definitions/ClientNews"
+               }
+            }
+         }
+      }
+   }
+}
